@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supply Station | Investor Relations</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #0a0a0a;
+            --bg-card: #141414;
+            --bg-hover: #1c1c1c;
+            --primary: #2ed06e;
+            --primary-dim: rgba(46, 208, 110, 0.1);
+            --text-main: #ffffff;
+            --text-muted: #9ca3af;
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 850px;
+            width: 100%;
+        }
+
+        /* --- TOP NAV & TABS --- */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .back-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+            display: inline-flex;
+            align-items: center;
+        }
+        .back-link:hover { color: var(--text-main); }
+
+        .tab-switcher {
+            display: flex;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            padding: 4px;
+        }
+
+        .tab {
+            padding: 8px 20px;
+            border-radius: 100px;
+            color: var(--text-muted);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            background: var(--primary-dim);
+            color: var(--primary);
+        }
+        
+        .tab:not(.active):hover {
+            color: var(--text-main);
+        }
+
+        /* --- TOOLTIP ICON --- */
+        .info-wrapper {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            cursor: help;
+            vertical-align: middle;
+        }
+
+        .info-icon {
+            width: 15px; height: 15px;
+            color: var(--text-muted);
+            transition: color 0.2s;
+        }
+
+        .info-wrapper:hover .info-icon {
+            color: var(--primary);
+        }
+
+        .info-tooltip {
+            visibility: hidden;
+            width: 240px;
+            background-color: var(--bg-hover);
+            color: var(--white);
+            text-align: center;
+            border-radius: 8px;
+            padding: 12px;
+            position: absolute;
+            z-index: 10;
+            bottom: 150%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            border: 1px solid var(--border);
+            font-size: 0.8rem;
+            line-height: 1.5;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+            text-transform: none;
+            letter-spacing: normal;
+            font-weight: 400;
+        }
+
+        /* Tooltip arrow */
+        .info-tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: var(--bg-hover) transparent transparent transparent;
+        }
+
+        .info-wrapper:hover .info-tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* --- HEADER / INTRO --- */
+        .intro-section {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .intro-section h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -0.03em;
+        }
+
+        .intro-section h1 span {
+            color: var(--primary);
+        }
+
+        .intro-section p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* --- COMMON UI FOR BOTH VIEWS --- */
+        .step-card, .master-control, .pillar-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            margin-bottom: 32px;
+        }
+
+        /* --- UNIT ECONOMICS STYLES --- */
+        .step-card {
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .step-card.result-card {
+            background: linear-gradient(180deg, var(--bg-card) 0%, rgba(46, 208, 110, 0.05) 100%);
+            border: 1px solid rgba(46, 208, 110, 0.3);
+            display: block; 
+            text-align: center;
+        }
+
+        .step-text h2 {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .step-badge {
+            background-color: var(--primary-dim);
+            color: var(--primary);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .step-text p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-bottom: 16px;
+        }
+
+        .controls-area {
+            background-color: var(--bg-hover);
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .input-group { margin-bottom: 24px; }
+        .input-group:last-child { margin-bottom: 0; }
+
+        .input-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .val-display { color: var(--primary); font-weight: 700; }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px; width: 24px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            margin-top: -10px;
+            box-shadow: 0 0 10px rgba(46, 208, 110, 0.4);
+            border: 3px solid var(--bg-card);
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%; height: 6px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .result-highlight {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px dashed rgba(255,255,255,0.1);
+        }
+
+        .result-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .result-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .huge-payback {
+            font-size: 5rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1;
+            margin: 20px 0;
+            text-shadow: 0 0 20px rgba(46, 208, 110, 0.4);
+        }
+
+        .dynamic-sentence {
+            font-size: 1.25rem;
+            line-height: 1.8;
+            color: var(--text-muted);
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .dynamic-sentence strong {
+            color: var(--text-main);
+            background: rgba(255,255,255,0.05);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        /* --- IMPACT SIMULATOR STYLES --- */
+        .master-control {
+            background: linear-gradient(180deg, var(--bg-card) 0%, rgba(46, 208, 110, 0.05) 100%);
+            border: 1px solid rgba(46, 208, 110, 0.3);
+            padding: 40px;
+            text-align: center;
+        }
+
+        .master-control h2 { font-size: 1.5rem; margin-bottom: 24px; }
+
+        .hub-display {
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 24px;
+            text-shadow: 0 0 20px rgba(46, 208, 110, 0.4);
+        }
+
+        .master-control input[type=range] { max-width: 500px; }
+
+        .pillar-card {
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .pillar-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
+        }
+
+        .pillar-icon {
+            width: 48px; height: 48px;
+            background-color: var(--primary-dim);
+            color: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pillar-icon svg { width: 24px; height: 24px; }
+
+        .pillar-header h3 { font-size: 1.5rem; color: var(--text-main); }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .stat-box {
+            background-color: var(--bg-hover);
+            padding: 24px;
+            border-radius: 12px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .stat-context {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .full-width-stat { grid-column: 1 / -1; }
+
+        /* Breakdown Math Box */
+        .math-breakdown-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 16px;
+            font-size: 0.9rem;
+        }
+        
+        .math-breakdown-box ul {
+            padding-left: 20px;
+            margin: 0;
+            color: var(--text-muted);
+        }
+
+        .math-breakdown-box li {
+            margin-bottom: 8px;
+        }
+
+        .math-breakdown-box li:last-child {
+            margin-bottom: 0;
+        }
+
+        .math-breakdown-box strong {
+            color: var(--text-main);
+        }
+
+        /* --- BOTTOM NAVIGATION UX --- */
+        .bottom-nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        .btn-bottom {
+            padding: 14px 28px;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-main);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: var(--text-main);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--bg-base);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.03);
+            box-shadow: 0 5px 15px rgba(46, 208, 110, 0.3);
+        }
+
+        /* --- FOOTER --- */
+        .contact-footer {
+            margin-top: 40px;
+            text-align: center;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            padding-top: 40px;
+        }
+
+        .contact-footer h3 {
+            color: var(--text-main);
+            margin-bottom: 12px;
+            font-size: 1.25rem;
+        }
+
+        .contact-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .contact-footer a:hover { text-decoration: underline; }
+
+        @media (max-width: 768px) {
+            .step-card { grid-template-columns: 1fr; gap: 24px; padding: 24px; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .huge-payback, .hub-display { font-size: 3.5rem; }
+            .intro-section h1 { font-size: 2rem; }
+            .top-nav { flex-direction: column; gap: 20px; }
+            .bottom-nav { flex-direction: column-reverse; gap: 16px; }
+            .btn-bottom { width: 100%; }
+        }
+
+        /* Toggler Utility */
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- TOP NAVIGATION & TABS -->
+        <div class="top-nav">
+            <a href="index.html" class="back-link">← Back to Website</a>
+            <div class="tab-switcher">
+                <button id="tab-econ" class="tab active" onclick="switchView('econ')">Unit Economics</button>
+                <button id="tab-impact" class="tab" onclick="switchView('impact')">Impact Simulator</button>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW 1: UNIT ECONOMICS (Storytelling Mode) -->
+        <!-- ========================================== -->
+        <div id="view-econ">
+            
+            <div class="intro-section">
+                <h1>How does a <span>Supply Station</span> make money?</h1>
+                <p>The presentation below explains the cost of establishing a single solar-powered hub, how it generates revenue, and how long it takes to pay for itself.</p>
+            </div>
+
+            <div class="step-card">
+                <div class="step-text">
+                    <h2><div class="step-badge">1</div> The Money Coming In</h2>
+                    <p>Hubs make money in two simple ways: Families pay a small yearly membership fee (GH₵ 300), and we take a strict 20% margin on the food they buy.</p>
+                    <p>Because the families pre-order and pre-pay, we carry <strong>zero debt</strong> for buying the food.</p>
+                </div>
+                
+                <div class="controls-area">
+                    <div class="input-group">
+                        <div class="input-header">
+                            <label>Families Using the Hub</label>
+                            <span class="val-display" id="families-val">100</span>
+                        </div>
+                        <input type="range" id="families" min="10" max="250" step="10" value="100">
+                    </div>
+                    <div class="input-group">
+                        <div class="input-header">
+                            <label>Average Monthly Spend</label>
+                            <span class="val-display" id="spend-val">GH₵ 1,500</span>
+                        </div>
+                        <input type="range" id="spend" min="500" max="3500" step="100" value="1500">
+                    </div>
+                    
+                    <div class="result-highlight">
+                        <div class="result-label" style="display: flex; align-items: center; gap: 6px;">
+                            Total Annual Revenue
+                            <div class="info-wrapper">
+                                <svg class="info-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg>
+                                <div class="info-tooltip">The combined income from yearly membership fees and the 20% retail margin on all food purchases for the year.</div>
+                            </div>
+                        </div>
+                        <div class="result-value" id="kpi-revenue">GH₵ 390,000</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-text">
+                    <h2><div class="step-badge">2</div> The Money Going Out</h2>
+                    <p>To start, we have to buy the physical shipping container and solar panels. This is our <strong>Build Cost</strong>.</p>
+                    <p>Once it's built, we have to pay our staff, maintain the solar panels, and handle security. This is our <strong>Running Cost</strong>.</p>
+                </div>
+                
+                <div class="controls-area">
+                    <div class="input-group">
+                        <div class="input-header">
+                            <label>Build Cost (One-time)</label>
+                            <span class="val-display" id="capex-val">GH₵ 90,000</span>
+                        </div>
+                        <input type="range" id="capex" min="50000" max="150000" step="5000" value="90000">
+                    </div>
+                    <div class="input-group">
+                        <div class="input-header">
+                            <label>Running Cost (Yearly)</label>
+                            <span class="val-display" id="opex-val">GH₵ 60,000</span>
+                        </div>
+                        <input type="range" id="opex" min="30000" max="100000" step="5000" value="60000">
+                    </div>
+                    
+                    <div class="result-highlight">
+                        <div class="result-label" style="display: flex; align-items: center; gap: 6px;">
+                            Cost-to-Revenue Ratio
+                            <div class="info-wrapper">
+                                <svg class="info-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg>
+                                <div class="info-tooltip">How much it costs in operational expenses to generate one unit of revenue. Lower means higher efficiency.</div>
+                            </div>
+                        </div>
+                        <div class="result-value" style="color: var(--primary);" id="kpi-ratio">15.4%</div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">It costs us <span id="text-cents" style="color:var(--text-main); font-weight:bold;">15</span> pesewas to make 1 Cedi.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-card result-card">
+                <h2><div class="step-badge" style="margin: 0 auto;">3</div> The Bottom Line</h2>
+                <p style="color: var(--text-muted); margin-top: 10px;">After paying all running costs, how quickly does the hub generate enough profit to cover its own build cost?</p>
+                
+                <div class="huge-payback" id="kpi-payback">3.3 Months</div>
+                
+                <p class="dynamic-sentence">
+                    <strong>In Plain English:</strong> By serving <strong id="txt-fam">100</strong> families, this single hub generates <strong id="txt-rev">GH₵ 390,000</strong> a year. After paying <strong id="txt-opex">GH₵ 60,000</strong> in running costs, it makes <strong id="txt-profit">GH₵ 330,000</strong> in pure profit. It completely pays off its <strong id="txt-build">GH₵ 90,000</strong> build cost in just <strong style="color: var(--primary);" id="txt-payback">3.3 Months</strong>.
+                </p>
+            </div>
+
+            <div class="bottom-nav">
+                <a href="index.html" class="btn-bottom btn-secondary">← Back to Website</a>
+                <button onclick="switchView('impact')" class="btn-bottom btn-primary">Impact Metrics →</button>
+            </div>
+
+        </div> <!-- /view-econ -->
+
+
+        <!-- ========================================== -->
+        <!-- VIEW 2: IMPACT SIMULATOR                   -->
+        <!-- ========================================== -->
+        <div id="view-impact" class="hidden">
+            
+            <div class="intro-section">
+                <h1>Visualizing our <span>Real-World Impact</span></h1>
+                <p>Use the slider below to see how our social, economic, and environmental footprint scales as we deploy more Supply Station Hubs across the city.</p>
+            </div>
+
+            <div class="master-control">
+                <h2>How many Hubs are we deploying?</h2>
+                <div class="hub-display"><span id="val-hubs">15</span> Hubs</div>
+                <input type="range" id="hubsSlider" min="1" max="50" step="1" value="15">
+            </div>
+
+            <div class="pillar-card">
+                <div class="pillar-header">
+                    <div class="pillar-icon">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path></svg>
+                    </div>
+                    <h3>Social & Economic Wealth Protection</h3>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-box full-width-stat">
+                        <div class="stat-label">Aggregate Community Savings (Yearly)</div>
+                        <div class="stat-value" id="val-savings-total">GH₵ 21.6 Million</div>
+                        <div class="stat-context">
+                            <p>By bypassing the up to 500% informal market markup (especially during off-seasons), we give families a massive, systemic discount. This is money injected directly back into local communities.</p>
+                            
+                            <!-- Detailed Math Breakdown Box -->
+                            <div class="math-breakdown-box">
+                                <strong style="display: block; margin-bottom: 8px;">How we calculate this:</strong>
+                                <ul>
+                                    <li><strong>Open Market Reality:</strong> A typical GH₵ 1,500/mo basket during seasonal spikes carries a 500% markup. True farm value = GH₵ 250.</li>
+                                    <li><strong>Our Price:</strong> We take that GH₵ 250 cost + strict 20% margin = GH₵ 300/mo.</li>
+                                    <li><strong>Family Savings:</strong> They save GH₵ 1,200/mo = GH₵ 14,400 per year.</li>
+                                    <li><strong>Total Impact:</strong> GH₵ 14,400 × <span id="math-fam-count" style="color: var(--primary); font-weight: bold;">1,500</span> families = <span id="math-total-savings" style="color: var(--primary); font-weight: bold;">GH₵ 21.6 Million</span>.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Vulnerable Families Secured</div>
+                        <div class="stat-value text-main" id="val-families" style="color: var(--text-main);">1,500</div>
+                        <div class="stat-context">Guaranteeing consistent, inflation-resistant pricing for households.</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Household-Level Relief</div>
+                        <div class="stat-value text-main" style="color: var(--text-main);">GH₵ 14,400</div>
+                        <div class="stat-context">The average family saves this much yearly. For a household making GH₵ 30,000 a year, we aren't just saving them money—we are giving them back nearly 50% of their annual salary, practically doubling their disposable income.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pillar-card">
+                <div class="pillar-header">
+                    <div class="pillar-icon">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"></path></svg>
+                    </div>
+                    <h3>Employment & Local Economy</h3>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-label">Direct Formal Jobs Created</div>
+                        <div class="stat-value" id="val-jobs">30</div>
+                        <div class="stat-context">Transforming informal, gig-style street vending into stable, salaried, tech-enabled logistics roles.</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Rural Farmer Livelihoods</div>
+                        <div class="stat-value text-main" style="color: var(--text-main); font-size: 1.5rem; margin-top: 10px;">Guaranteed Off-take</div>
+                        <div class="stat-context" style="margin-top: 15px;">By pooling demand upfront, we provide rural cooperatives with predictable bulk orders, protecting them from market volatility.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pillar-card">
+                <div class="pillar-header">
+                    <div class="pillar-icon">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3.06 13a9 9 0 1017.88 0M12 3v10l4.5 4.5"></path></svg>
+                    </div>
+                    <h3>Environmental & Climate Impact</h3>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-label">Off-Grid Solar Hubs</div>
+                        <div class="stat-value" id="val-solar">15</div>
+                        <div class="stat-context">Building a decentralized urban cold-chain without adding a single kilowatt of strain to the national energy grid.</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Post-Harvest Waste</div>
+                        <div class="stat-value text-main" style="color: var(--text-main);">Zero</div>
+                        <div class="stat-context">Because inventory is pre-ordered via our membership model, we carry zero speculative inventory. Food is procured exactly to demand.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom-nav">
+                <a href="index.html" class="btn-bottom btn-secondary">← Back to Website</a>
+                <button onclick="switchView('econ')" class="btn-bottom btn-primary">Unit Economics →</button>
+            </div>
+
+        </div> <!-- /view-impact -->
+
+        <!-- SHARED FOOTER -->
+        <div class="contact-footer">
+            <h3>Let's Build Africa's Climate-smart Food Distribution Network Together</h3>
+            <p>Email: <a href="mailto:makamezah@gmail.com">makamezah@gmail.com</a> &nbsp;|&nbsp; Phone: <a href="tel:+233594844808">+233 59 484 4808</a></p>
+        </div>
+
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+        /* --- VIEW TOGGLER SYSTEM --- */
+        function switchView(viewName) {
+            const viewEcon = document.getElementById('view-econ');
+            const viewImpact = document.getElementById('view-impact');
+            const tabEcon = document.getElementById('tab-econ');
+            const tabImpact = document.getElementById('tab-impact');
+
+            if (viewName === 'econ') {
+                viewEcon.classList.remove('hidden');
+                viewImpact.classList.add('hidden');
+                tabEcon.classList.add('active');
+                tabImpact.classList.remove('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                viewEcon.classList.add('hidden');
+                viewImpact.classList.remove('hidden');
+                tabEcon.classList.remove('active');
+                tabImpact.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        /* --- LOGIC: UNIT ECONOMICS --- */
+        const ANNUAL_MEMBERSHIP_FEE = 300;
+        const SUPPLY_STATION_MARGIN = 0.20;
+        const formatGHS = (num) => "GH₵ " + num.toLocaleString('en-US', { maximumFractionDigits: 0 });
+
+        function calculateEcon() {
+            const families = parseInt(document.getElementById('families').value);
+            const monthlySpend = parseInt(document.getElementById('spend').value);
+            const capex = parseInt(document.getElementById('capex').value);
+            const opex = parseInt(document.getElementById('opex').value);
+
+            document.getElementById('families-val').textContent = families;
+            document.getElementById('spend-val').textContent = formatGHS(monthlySpend);
+            document.getElementById('capex-val').textContent = formatGHS(capex);
+            document.getElementById('opex-val').textContent = formatGHS(opex);
+
+            const membershipRevenue = families * ANNUAL_MEMBERSHIP_FEE;
+            const annualGMV = families * monthlySpend * 12;
+            const retailRevenue = annualGMV * SUPPLY_STATION_MARGIN;
+            
+            const totalAnnualRevenue = membershipRevenue + retailRevenue;
+            const netOperatingIncome = totalAnnualRevenue - opex;
+            
+            let costToRevenueRatio = (opex / totalAnnualRevenue) * 100;
+            
+            let paybackMonths = "N/A";
+            if (netOperatingIncome > 0) {
+                const monthlyNOI = netOperatingIncome / 12;
+                paybackMonths = (capex / monthlyNOI).toFixed(1);
+            } else {
+                paybackMonths = "Never";
+            }
+
+            document.getElementById('kpi-revenue').textContent = formatGHS(totalAnnualRevenue);
+            document.getElementById('kpi-ratio').textContent = costToRevenueRatio.toFixed(1) + "%";
+            document.getElementById('text-cents').textContent = Math.round(costToRevenueRatio);
+            
+            if (paybackMonths === "Never") {
+                document.getElementById('kpi-payback').textContent = "Not Profitable";
+            } else {
+                document.getElementById('kpi-payback').textContent = paybackMonths + " Months";
+            }
+
+            document.getElementById('txt-fam').textContent = families;
+            document.getElementById('txt-rev').textContent = formatGHS(totalAnnualRevenue);
+            document.getElementById('txt-opex').textContent = formatGHS(opex);
+            document.getElementById('txt-profit').textContent = formatGHS(netOperatingIncome);
+            document.getElementById('txt-build').textContent = formatGHS(capex);
+            document.getElementById('txt-payback').textContent = paybackMonths + " Months";
+        }
+
+        const econInputs = ['families', 'spend', 'capex', 'opex'];
+        econInputs.forEach(id => {
+            document.getElementById(id).addEventListener('input', calculateEcon);
+        });
+
+        /* --- LOGIC: IMPACT SIMULATOR --- */
+        const FAMILIES_PER_HUB = 100;
+        // GHC 14,400 based on the 500% informal market spike math vs 20% flat margin
+        const SAVINGS_PER_FAMILY_YEARLY = 14400; 
+        const JOBS_PER_HUB = 2; 
+
+        const formatNumber = (num) => num.toLocaleString('en-US');
+        const formatLargeCurrency = (num) => {
+            if (num >= 1000000) {
+                return "GH₵ " + (num / 1000000).toFixed(1) + " Million";
+            }
+            return "GH₵ " + num.toLocaleString('en-US');
+        };
+
+        function calculateImpact() {
+            const hubs = parseInt(document.getElementById('hubsSlider').value);
+
+            const totalFamilies = hubs * FAMILIES_PER_HUB;
+            const totalSavings = totalFamilies * SAVINGS_PER_FAMILY_YEARLY;
+            const totalJobs = hubs * JOBS_PER_HUB;
+
+            // Update main numbers
+            document.getElementById('val-hubs').textContent = hubs;
+            document.getElementById('val-families').textContent = formatNumber(totalFamilies);
+            document.getElementById('val-savings-total').textContent = formatLargeCurrency(totalSavings);
+            document.getElementById('val-jobs').textContent = formatNumber(totalJobs);
+            document.getElementById('val-solar').textContent = hubs;
+
+            // Update the Math Breakdown box numbers dynamically
+            document.getElementById('math-fam-count').textContent = formatNumber(totalFamilies);
+            document.getElementById('math-total-savings').textContent = formatLargeCurrency(totalSavings);
+        }
+
+        document.getElementById('hubsSlider').addEventListener('input', calculateImpact);
+
+        // Run both calculations once on page load to set initial values
+        calculateEcon();
+        calculateImpact();
+    </script>
+</body>
+</html>
